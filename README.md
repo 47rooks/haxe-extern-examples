@@ -81,18 +81,16 @@ is that you have already built it the exe.
 The `Debug hxcpp` runs the hxcpp debugger to debug cpp target code at the 
 Haxe level. The significant fields are
 
-```
-name: this is the name that appears in the Run and Debug pulldown menu.
-type: must be cppvsdbg for the internal native debugger.
-program: the particular program you are debugging.
-args: any args it must be launched with.
-cwd: because of the way windows finds DLLs it can help to copy them into the 
-directory containing the exe and then run it from there. Hence setting cwd to
-this value is useful.
-symbolOptions: needed to find the debugging symbols.
-searchPaths: this should be set to a list of directories that contain pdb
-files. In the example here that is, and the external library, respectively.
-```
+|Option|Description|
+|-|-|
+|name|this is the name that appears in the `Run and Debug` pulldown menu.|
+|type|must be cppvsdbg for the internal native debugger.|
+|program|the particular program you are debugging.|
+|args| any args it must be launched with.|
+|cwd|because of the way windows finds DLLs it can help to copy them into the 
+|directory|containing the exe and then run it from there. Hence setting cwd to this value is useful.|
+|symbolOptions|needed to find the debugging symbols.|
+|searchPaths|this should be set to a list of directories that contain pdb files. In the example here that is, and the external library, respectively.|
 
 With these configurations in place VSCode Run-> Start Debugging can work with
 either a Haxe hxcpp debugger or directly in c++ with the native debugger. You
