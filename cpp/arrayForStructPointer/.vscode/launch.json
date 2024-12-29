@@ -1,0 +1,39 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Run hxcpp",
+        "type": "hxcpp",
+        "request": "launch",
+        "program": "${workspaceFolder}/export/cpp/Main-debug.exe"
+      },
+      {
+        "name": "Dbg hxcpp",
+        "type": "hxcpp",
+        "request": "launch",
+        "preLaunchTask": "Run-debugee",
+        "program": "${workspaceFolder}/export/cpp/Main-debug.exe"
+      },
+      {
+          "name": "Dbg VSC",
+          "type": "cppvsdbg",
+          "request": "launch",
+          "program": "${workspaceFolder}/export/cpp/Main-debug.exe",
+          "args": [],
+          "stopAtEntry": false,
+          "cwd": "${fileDirname}",
+          "environment": [],
+          "console": "externalTerminal",
+          "symbolOptions": {
+            "searchPaths": [
+              "${workspaceFolder}/export/cpp",
+              "${workspaceFolder}/extlib/cpp/mylib/x64/Debug"
+            ],
+            "searchMicrosoftSymbolServer": false
+          }
+      }
+    ]
+  }
