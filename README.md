@@ -98,3 +98,6 @@ With these configurations in place VSCode Run-> Start Debugging can work with
 either a Haxe hxcpp debugger or directly in c++ with the native debugger. You
 just select the launch configuration in the Run and Debug pull down menu in
 the debug view.
+
+Refer to the VSCode documentation on launchers and tasks for more details at
+https://code.visualstudio.com/docs/cpp/launch-json-reference.
