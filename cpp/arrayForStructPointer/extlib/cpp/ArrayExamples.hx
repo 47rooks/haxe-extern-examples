@@ -1,5 +1,6 @@
 package;
 
+import cpp.Reference;
 import cpp.StdString;
 
 /**
@@ -39,5 +40,24 @@ extern class ArrayExamples {
 	 * @return StdString the command delimited string 
 	 */
 	@:native("simpleIntPointer")
-	public function simpleIntPointer(a:cpp.RawPointer<Int>, size:Int):StdString;
+	public function simpleIntPointer(a:cpp.RawPointer<Int>, size:Int):cpp.StdString;
+
+	@:native("appendToString")
+	public function appendToString(inStr:Reference<StdString>):cpp.StdString;
+
+	@:native("simpleIntPointer2")
+	public function simpleIntPointer2(a:cpp.RawPointer<Int>, size:Int):String;
+
+	@:native("getMyStr")
+	public function getMyStr():String;
+	/**
+	 * Call a c++ function to convert an array of Ints into a comma delimited
+	 * string.
+	 * @param a the array if Ints
+	 * @param size the number of elements in the array. If 0 then `a` must
+	 * end with a 0 element.
+	 * @return String the command delimited string 
+	 */
+	// @:native("simpleIntPointer2")
+	// public function simpleIntPointer2(a:cpp.RawPointer<Int>, size:Int):String;
 }

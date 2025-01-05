@@ -6,6 +6,7 @@
 -dce full
 -D HXCPP_VERBOSE
 -D HXCPP_M64
+-D HXCPP_CPP17=1
 -debug
 
 # -cmd clear

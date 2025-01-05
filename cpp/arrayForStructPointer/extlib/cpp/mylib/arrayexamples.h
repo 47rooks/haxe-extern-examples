@@ -1,6 +1,10 @@
 #pragma once
 
 #include <string>
+//#define HX_WINDOWS
+//#define HXCPP_M64
+//#include "hxcpp.h"
+//#include "hxString.h"
 
 /// <summary>
 /// This lua_State struct is a dummy for the real lua_State and contains
@@ -38,8 +42,18 @@ public:
 	/// concatenated together.</returns>
 	std::string simpleIntPointer(int* a, int size);
 
+	std::string appendToString(std::string& in);
+
+	//String simpleIntPointer2(int* a, int size);
+
+	//const char * simpleIntPointer2(int* a, int size);
+
 	//void luaL_RegPointer(const luaL_Reg* l);
 	//void setfuncs();
+	std::string& getMyStr();
+
+private:
+	std::string myStr{ "This is my internal string" };
 };
 
 /// <summary>
