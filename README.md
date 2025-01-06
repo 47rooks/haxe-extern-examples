@@ -2,6 +2,7 @@
 
 - [Haxe extern examples and experiments](#haxe-extern-examples-and-experiments)
   - [Projects](#projects)
+  - [Using these Examples](#using-these-examples)
   - [VSCode Configuration Notes](#vscode-configuration-notes)
   - [Compiling C++ Only with HXCPP](#compiling-c-only-with-hxcpp)
   - [Setting the C++ version for HXCPP](#setting-the-c-version-for-hxcpp)
@@ -25,6 +26,17 @@ been created. The plan is to cover at least examples for cpp, hl and perhaps js.
 There is no great plan to cover all possible types and structures but rather
 to provide a representative sample and document techniques so that as cases
 come up is it easy to write code to handle them.
+
+## Using these Examples
+
+`libs.hxml` allows you to install the required libs via one command
+`haxelib install libs.hxml`. These examples are currently being tested with
+the Haxe 4.3.6 release. And hxcpp, hxcpp-debug-server, and hxcpp-debugger
+are being used from their latest git versions. `utest` is from `lib.haxe.org`.
+
+First step is to compile the C++ example library using the Visual Studio
+solution provided in `haxe-extern-examples\cpp\arrayForStructPointer\extlib\cpp\mylib`.
+
 
 ## VSCode Configuration Notes
 

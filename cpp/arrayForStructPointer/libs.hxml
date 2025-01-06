@@ -1,0 +1,4 @@
+-lib hxcpp
+-lib hxcpp-debug-server
+-lib hxcpp-debugger
+-lib utest

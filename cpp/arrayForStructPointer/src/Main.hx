@@ -1,9 +1,11 @@
 package;
 
 import ArrayExamples;
-
+import BasicTypes;
 // import cpp.Reference;
 // import haxe.ds.StringMap;
+import utest.Runner;
+import utest.ui.Report;
 
 /**
  * Main is an example of using the statically linked extern class Hello.
@@ -13,7 +15,7 @@ import ArrayExamples;
  *       I have simpler cases going.
  */
 class Main {
-	static function main() {
+	static function testArrayExamples():Void {
 		trace('started');
 
 		var std = StdString.create("my std::string");
@@ -56,6 +58,12 @@ class Main {
 		// s = ae.simpleIntPointer(cpp.Pointer.ofArray(arr2).raw, 0);
 		// trace('call finished');
 		// trace('s=${s.toString()}');
+	}
+
+	public static function main() {
+		// testArrayExamples();
+
+		utest.UTest.run([new TestBasicTypes()]);
 	}
 }
 

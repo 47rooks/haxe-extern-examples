@@ -8,6 +8,6 @@
 -D HXCPP_M64
 -D HXCPP_CPP17=1
 -debug
-
+-lib utest
 # -cmd clear
 # -cmd export/cpp/Main

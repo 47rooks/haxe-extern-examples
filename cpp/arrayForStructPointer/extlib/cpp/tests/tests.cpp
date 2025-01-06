@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "arrayexamples.h"
+#include "basictypes.h"
+
 #include <iostream>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace tests
 {
-	TEST_CLASS(tests)
+	TEST_CLASS(ArrayExamplesTest)
 	{
 	public:
 		
@@ -49,5 +51,39 @@ namespace tests
 			std::cout << rv.c_str() << std::endl;
 			Assert::AreEqual("This is my internal string", rv.c_str());
 		}
+	};
+
+	TEST_CLASS(BasicTypesTests) {
+	public:
+		TEST_METHOD(testGetInt) {
+			BasicTypes bt;
+			Assert::AreEqual(10, bt.getInt());
+		}
+
+		TEST_METHOD(testGetIntPtr) {
+			BasicTypes bt;
+			Assert::AreEqual(11, *bt.getIntPtr());
+		}
+
+		TEST_METHOD(testGetIntRef) {
+			BasicTypes bt;
+			Assert::AreEqual(12, bt.getIntRef());
+		}
+
+		TEST_METHOD(testGetBool) {
+			BasicTypes bt;
+			Assert::IsFalse(bt.getBool());
+		}
+
+		TEST_METHOD(testGetBoolPtr) {
+			BasicTypes bt;
+			Assert::IsFalse(*bt.getBoolPtr());
+		}
+
+		TEST_METHOD(testGetBoolRef) {
+			BasicTypes bt;
+			Assert::IsTrue(bt.getBoolRef());
+		}
+
 	};
 }

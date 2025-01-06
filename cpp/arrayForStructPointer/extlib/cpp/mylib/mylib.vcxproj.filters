@@ -18,9 +18,15 @@
     <ClCompile Include="arrayexamples.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="basictypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arrayexamples.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="basictypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
