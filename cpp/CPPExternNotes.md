@@ -101,7 +101,7 @@ extern class ClassConstruction {
 	public static function create():ClassConstruction;
 ```
 
-This is useful for a local that will not be retained beyond the scope it is created in. There is no need to destroy (in fact you cannot) as the class will just get cleaned up when the scope is exited.
+This object is created on the stack. In theory you would just use it and let it go out of scope. In this way it would act quite like a Haxe class. There is no need to destroy (in fact you cannot) as the class will just get cleaned up when the scope is exited. Returning this class instance from a function should work with standard C++ copy/move semantics but it is probably better particularly for a large object to use the following model.
 
 ### Constructor - Heap allocated, pointer to object, struct access
 ```
