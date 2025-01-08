@@ -1,5 +1,14 @@
 # CPP Extern Notes
 
+- [CPP Extern Notes](#cpp-extern-notes)
+  - [Introduction](#introduction)
+  - [Patterns](#patterns)
+    - [Constructor - Stack allocated, object, struct access](#constructor---stack-allocated-object-struct-access)
+    - [Constructor - Heap allocated, pointer to object, struct access](#constructor---heap-allocated-pointer-to-object-struct-access)
+    - [Constructor - Heap allocated, pointer of type pointer to object, pointer access](#constructor---heap-allocated-pointer-of-type-pointer-to-object-pointer-access)
+    - [Constructor - Stack allocated, object reference, struct access](#constructor---stack-allocated-object-reference-struct-access)
+
+
 In general the plan is to have an extern project here for a kind of native
 type. The library will cover as much of the functionality of the type as
 is necessary to demonstate the principles and experiment with any difficult
@@ -68,7 +77,7 @@ As you can see above every string ClassConstruction in Haxe lines 10 and 11 has 
 
 Most of these elements are retained regardless of the model of externing you choose. The four choices I know off are listed now.
 
-### Stack allocated, object, struct access
+### Constructor - Stack allocated, object, struct access
 
 ```
 @:unreflective
@@ -94,7 +103,7 @@ extern class ClassConstruction {
 
 This is useful for a local that will not be retained beyond the scope it is created in. There is no need to destroy (in fact you cannot) as the class will just get cleaned up when the scope is exited.
 
-### Heap allocated, pointer to object, struct access
+### Constructor - Heap allocated, pointer to object, struct access
 ```
 @:unreflective
 @:structAccess
@@ -133,7 +142,7 @@ HXLINE(  17)		bt->destroy();
 
 Here it is worth pointing out that the HXLINE 16 translation here `bt->get_value().getInt();` is again structAccess. The `bt->get_value()` is the `cpp.Pointer` dereference but the actual `BasicTypes` access to the `getInt()` method is via the `.` operator, structure access.
 
-### Heap allocated, pointer of type pointer to object, pointer access
+### Constructor - Heap allocated, pointer of type pointer to object, pointer access
 ```
 @:unreflective
 @:include("./mylib/basictypes.h")
@@ -156,12 +165,12 @@ extern class ClassConstructionPtrOfPtrToType {
 	public static function create():cpp.Pointer<ClassConstructionPtrOfPtrToType>;
 ```
 
-This seems pretty useless to me. It changes the C++ field access to use the `->` pointer access in place of the `.` field access. This is essentially invisible at the Haxe level. To demonstrate this is the C++ code from a test to access the `getInt()` method.
+This seems pretty useless to me. It changes the C++ field access to use the `->` pointer access in place of the `.` field access. This is essentially invisible at the Haxe level. To demonstrate, this is the C++ code from a test to access the `getInt()` method.
 ```
 HXLINE(  29)		int _hx_tmp = bt->get_value()->getInt();
 ```
 
-### Stack allocated, object reference, struct access
+### Constructor - Stack allocated, object reference, struct access
 ```
 @:unreflective
 @:structAccess
