@@ -1,4 +1,3 @@
-import cpp.Int32;
 import utest.Assert;
 
 class TestBasicTypes extends utest.Test {

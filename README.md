@@ -35,7 +35,8 @@ the Haxe 4.3.6 release. And hxcpp, hxcpp-debug-server, and hxcpp-debugger
 are being used from their latest git versions. `utest` is from `lib.haxe.org`.
 
 First step is to compile the C++ example library using the Visual Studio
-solution provided in `haxe-extern-examples\cpp\arrayForStructPointer\extlib\cpp\mylib`.
+solution provided in 
+`haxe-extern-examples\cpp\arrayForStructPointer\extlib\cpp\mylib`.
 
 
 ## VSCode Configuration Notes

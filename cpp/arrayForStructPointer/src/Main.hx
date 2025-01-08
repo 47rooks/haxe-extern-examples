@@ -8,7 +8,8 @@ import utest.Runner;
 import utest.ui.Report;
 
 /**
- * Main is an example of using the statically linked extern class Hello.
+ * Main is a UTest driver module only. Remnant code here will be moved to
+ * unit test classes in due course.
  * 
  * FIXME Most of these tests are trying to get a std::string to be returned
  *       from c++. This is so far not working. I will come back to this once
@@ -35,12 +36,12 @@ class Main {
 		// var suffixTest = ae.appendToString(x);
 		// trace('suffix rtn=${suffixTest}');
 
-		var s = StdString.ofStdString(ae.simpleIntPointer(cpp.Pointer.ofArray(arry).raw, arry.length));
-		// trace(s.get_ref().toString());
-		// trace(s.value.toString());
-		trace('mystr=${ae.getMyStr()}');
-		trace('s=${new String(s.value.c_str())}');
-		// trace(s);
+		// var s = StdString.ofStdString(ae.simpleIntPointer(cpp.Pointer.ofArray(arry).raw, arry.length));
+		// // trace(s.get_ref().toString());
+		// // trace(s.value.toString());
+		// trace('mystr=${ae.getMyStr()}');
+		// trace('s=${new String(s.value.c_str())}');
+		// // trace(s);
 
 		trace('test 2');
 		var arr2 = new Array();
@@ -61,9 +62,8 @@ class Main {
 	}
 
 	public static function main() {
+		utest.UTest.run([new TestClassConstruction(), new TestBasicTypes()]);
 		// testArrayExamples();
-
-		utest.UTest.run([new TestBasicTypes()]);
 	}
 }
 
