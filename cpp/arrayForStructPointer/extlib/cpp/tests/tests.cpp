@@ -2,6 +2,7 @@
 #include "CppUnitTest.h"
 #include "arrayexamples.h"
 #include "basictypes.h"
+#include "callbackexamples.h"
 
 #include <iostream>
 #include <string>
@@ -98,6 +99,7 @@ namespace tests
 			Assert::AreEqual(30, rv);
 		}
 
+
 		// FIXME Move to StringTypesTests
 		//TEST_METHOD(testConcat) {
 		//	BasicTypes bt;
@@ -108,5 +110,18 @@ namespace tests
 		//	Assert::AreEqual(exp, bt.concat(a, b));
 		//}
 
+	};
+
+	int add(int a, int b) {
+		return a + b;
+	}
+
+	TEST_CLASS(CallbackExamplesTests) {
+	public:
+		TEST_METHOD(testInvoke) {
+
+			CallbackExamples ce(add);
+			Assert::AreEqual(27, ce.invoke(12, 15));
+		}
 	};
 }

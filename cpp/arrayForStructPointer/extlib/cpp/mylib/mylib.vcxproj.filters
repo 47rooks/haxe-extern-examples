@@ -21,12 +21,18 @@
     <ClCompile Include="basictypes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="callbackexamples.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arrayexamples.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="basictypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="callbackexamples.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

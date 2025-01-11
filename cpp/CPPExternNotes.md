@@ -13,6 +13,8 @@
       - [Simple call with basic type parameters and pointer to basic type return](#simple-call-with-basic-type-parameters-and-pointer-to-basic-type-return)
       - [Simple call with basic type parameters and return](#simple-call-with-basic-type-parameters-and-return)
       - [Simple call with basic type out parameter](#simple-call-with-basic-type-out-parameter)
+    - [Invoking Haxe from C++](#invoking-haxe-from-c)
+      - [A module function callback](#a-module-function-callback)
 
 
 In general the plan is to have an extern project here for a kind of native
@@ -23,6 +25,8 @@ cases. These examples are not intended to be exhaustive.
 ## Introduction
 
 Essentially externs in Haxe provide a way to tell the compiler what code to generate in the transpiler output and how to present the extern on the Haxe level. It really is impossible I think to fully understand extern syntax and "modelling choices" as I'll call them without understanding the target language, and what Haxe statements translate to when transpiled. In the examples that follow some familiarity with C++ is assumed as the explanations would be much longer without that basis.
+
+There are pairs of Haxe files, being a test class to demonstrate a collection of related features and a corresponding and similarly named `Test*.hx` which tests the functions to demonstrate how the externs are used. The extern classes themselves are part of the library under `extlib\cpp`. The thinking here is that a additional externs to different targets will be added and a generic layer abstracting away target specific types will be added above them.
 
 ## Patterns
 
@@ -304,3 +308,59 @@ or
 		bt.sumOutParam(16, 12, Pointer.addressOf(rv).raw);
 ```
 I'd probably recommend the latter as it should be compatible with the fixed and the existing code.
+
+### Invoking Haxe from C++
+
+The first thing to say about this is that this is not actually what happens. What happens is that you pass a function in some way to the extern and then it's called by C++. But all of this actually happens in C++ when executed at runtime. Regardless of how it actually works though, it is convenient to think of it as being a Haxe function called from C++, and that's how it's colloquially described. And in the end there are reasons why that's not as wildly inaccurate as it might first seem.
+
+That out of the way, there are at least three ways I can see this being done. The first example here is the registering of a module level Haxe function as a simple callback.
+
+#### A module function callback
+
+These examples are in
+
+|File|Description|
+|-|-|
+|callbackexamples.h|The C++ library header|
+|callbackexamples.cpp|The C++ implementation|
+|CallbackExamples.hx|The Haxe extern model for the CallbackExamples C++ class|
+|TestCallbackExamples.hx|The Haxe unit test showing how to use the extern in various cases|
+
+Given a Haxe function at the module level
+```
+/**
+ * `add` is a callback function that will be invoked from the C++ side of the extern.
+ * In this case it simply adds the two integers and returns the result.
+ * @param a 
+ * @param b 
+ * @return Int a + b
+ */
+function add(a:Int, b:Int):Int {
+	return a + 2 * b;
+}
+```
+and the following extern class model
+```
+extern class CallbackExamples {
+	/**
+	 * Factory function mapped to the native constructor.
+	 * @return an BasicTypes instance
+	 */
+	// @:native("new BasicTypes")
+	@:native("CallbackExamples")
+	public static function create(cbk:Callable<(Int, Int) -> Int>):CallbackExamples;
+
+	/**
+	 * Call the C++ library class to invoke the callback. This is a terribly simplistic example and you would not necessarily expect such a direct invocation of the function passed to the constructor but it serves as an example.
+	 * @param a 
+	 * @param b 
+	 * @return Int the combination of `a` and `b` as defined by `cbk` which was provided to the constructor.
+	 */
+	public function invoke(a:Int, b:Int):Int;
+}
+```
+we can pass the `add()` function to an instance of the `CallbackExamples` during construction. Later we can cause that callback `add()` to be run by calling `CallbackExamples.invoke()`. This may be done this way in Haxe
+```
+		var ce = CallbackExamples.create(Function.fromStaticFunction(add));
+        var result = ce.invoke(100, 120);
+```

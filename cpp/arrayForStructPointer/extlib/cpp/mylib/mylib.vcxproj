@@ -133,10 +133,12 @@
   <ItemGroup>
     <ClCompile Include="arrayexamples.cpp" />
     <ClCompile Include="basictypes.cpp" />
+    <ClCompile Include="callbackexamples.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arrayexamples.h" />
     <ClInclude Include="basictypes.h" />
+    <ClInclude Include="callbackexamples.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
