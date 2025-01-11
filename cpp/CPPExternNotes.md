@@ -10,6 +10,8 @@
       - [Constructor - Stack allocated, object reference, struct access](#constructor---stack-allocated-object-reference-struct-access)
     - [Function Calls with Basic Types](#function-calls-with-basic-types)
       - [Simple call with basic type returns](#simple-call-with-basic-type-returns)
+      - [Simple call with basic type parameters and pointer to basic type return](#simple-call-with-basic-type-parameters-and-pointer-to-basic-type-return)
+      - [Simple call with basic type parameters and return](#simple-call-with-basic-type-parameters-and-return)
       - [Simple call with basic type out parameter](#simple-call-with-basic-type-out-parameter)
 
 
@@ -229,6 +231,9 @@ This just simply gets an int from C++. This extern is for the following C++
 ```
 
 Super simple and obvious and for basic types that's mostly the story.
+
+#### Simple call with basic type parameters and pointer to basic type return
+
 You can do pointer and reference returns even leveraging the C++ copy/move if you capture the return value in the single expression. For example, this Haxe
 ```
 	public function getIntPtr():cpp.RawPointer<Int>;
@@ -248,6 +253,27 @@ HXLINE(  27)		int i = bt.getIntPtr()[0];
 which captures the return value from the pointer before the end of the C++ expression. If you just keep the pointer as `var i = bt.getIntPtr()` and then try to dereference `i[0]` later it will be a dangling pointer.
 
 The same approach is demonstrated with references and with booleans. References are nice in the that they do not require the `[0]` to dereference.
+
+#### Simple call with basic type parameters and return
+
+Given this Haxe
+```
+	/**
+	 * Sum two integers.
+	 * @return Int
+	 */
+	public function sum(a:Int, b:Int):Int;
+```
+over this C++
+```
+	int sum(int a, int b);
+```
+and called from
+```
+		var v = bt.sum(16, 12);
+```
+
+So this is again a very simple case for basic types.
 
 #### Simple call with basic type out parameter
 
