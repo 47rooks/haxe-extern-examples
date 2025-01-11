@@ -4,6 +4,7 @@
 #include "basictypes.h"
 
 #include <iostream>
+#include <string>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -84,6 +85,28 @@ namespace tests
 			BasicTypes bt;
 			Assert::IsTrue(bt.getBoolRef());
 		}
+
+		TEST_METHOD(testSum) {
+			BasicTypes bt;
+			Assert::AreEqual(8, bt.sum(3, 5));
+		}
+
+		TEST_METHOD(testSumOut) {
+			BasicTypes bt;
+			int rv;
+			bt.sumOutParam(23, 7, &rv);
+			Assert::AreEqual(30, rv);
+		}
+
+		// FIXME Move to StringTypesTests
+		//TEST_METHOD(testConcat) {
+		//	BasicTypes bt;
+		//	const char* a = "Hello";
+		//	const char* b = " World";
+		//	//std::string exp{ "Hello World" };
+		//	const char* exp = "Hello World";
+		//	Assert::AreEqual(exp, bt.concat(a, b));
+		//}
 
 	};
 }

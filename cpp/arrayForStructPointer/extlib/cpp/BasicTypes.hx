@@ -1,5 +1,7 @@
 package;
 
+import cpp.RawConstPointer;
+
 @:structAccess
 @:include("./mylib/basictypes.h")
 @:buildXml('
@@ -7,7 +9,6 @@ package;
     <lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib"/>
 	</target>
 ')
-// @:native("BasicTypes *")
 @:native("BasicTypes")
 extern class BasicTypes {
 	/**
@@ -59,4 +60,15 @@ extern class BasicTypes {
 	 * @return cpp.Reference<Bool>
 	 */
 	public function getBoolRef():cpp.Reference<Bool>;
+
+	/**
+	 * Sum two integers.
+	 * @return Int
+	 */
+	public function sum(a:Int, b:Int):Int;
+
+	/**
+	 * Sum two values and return the result via an out parameter.
+	 */
+	public function sumOutParam(a:Int, b:Int, out:cpp.RawPointer<Int>):Void;
 }

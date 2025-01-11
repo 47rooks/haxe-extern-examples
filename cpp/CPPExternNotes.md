@@ -3,10 +3,14 @@
 - [CPP Extern Notes](#cpp-extern-notes)
   - [Introduction](#introduction)
   - [Patterns](#patterns)
-    - [Constructor - Stack allocated, object, struct access](#constructor---stack-allocated-object-struct-access)
-    - [Constructor - Heap allocated, pointer to object, struct access](#constructor---heap-allocated-pointer-to-object-struct-access)
-    - [Constructor - Heap allocated, pointer of type pointer to object, pointer access](#constructor---heap-allocated-pointer-of-type-pointer-to-object-pointer-access)
-    - [Constructor - Stack allocated, object reference, struct access](#constructor---stack-allocated-object-reference-struct-access)
+    - [Constructors](#constructors)
+      - [Constructor - Stack allocated, object, struct access](#constructor---stack-allocated-object-struct-access)
+      - [Constructor - Heap allocated, pointer to object, struct access](#constructor---heap-allocated-pointer-to-object-struct-access)
+      - [Constructor - Heap allocated, pointer of type pointer to object, pointer access](#constructor---heap-allocated-pointer-of-type-pointer-to-object-pointer-access)
+      - [Constructor - Stack allocated, object reference, struct access](#constructor---stack-allocated-object-reference-struct-access)
+    - [Function Calls with Basic Types](#function-calls-with-basic-types)
+      - [Simple call with basic type returns](#simple-call-with-basic-type-returns)
+      - [Simple call with basic type out parameter](#simple-call-with-basic-type-out-parameter)
 
 
 In general the plan is to have an extern project here for a kind of native
@@ -19,6 +23,10 @@ cases. These examples are not intended to be exhaustive.
 Essentially externs in Haxe provide a way to tell the compiler what code to generate in the transpiler output and how to present the extern on the Haxe level. It really is impossible I think to fully understand extern syntax and "modelling choices" as I'll call them without understanding the target language, and what Haxe statements translate to when transpiled. In the examples that follow some familiarity with C++ is assumed as the explanations would be much longer without that basis.
 
 ## Patterns
+
+### Constructors
+
+These examples are in the `ClassConstruction.hx` module.
 
 Ways of modelling an extern class. There are four ways I know of currently
 to extern a C++ class. They differ in where the memory is allocated and how
@@ -77,7 +85,7 @@ As you can see above every string ClassConstruction in Haxe lines 10 and 11 has 
 
 Most of these elements are retained regardless of the model of externing you choose. The four choices I know off are listed now.
 
-### Constructor - Stack allocated, object, struct access
+#### Constructor - Stack allocated, object, struct access
 
 ```
 @:unreflective
@@ -103,7 +111,7 @@ extern class ClassConstruction {
 
 This object is created on the stack. In theory you would just use it and let it go out of scope. In this way it would act quite like a Haxe class. There is no need to destroy (in fact you cannot) as the class will just get cleaned up when the scope is exited. Returning this class instance from a function should work with standard C++ copy/move semantics but it is probably better particularly for a large object to use the following model.
 
-### Constructor - Heap allocated, pointer to object, struct access
+#### Constructor - Heap allocated, pointer to object, struct access
 ```
 @:unreflective
 @:structAccess
@@ -142,7 +150,7 @@ HXLINE(  17)		bt->destroy();
 
 Here it is worth pointing out that the HXLINE 16 translation here `bt->get_value().getInt();` is again structAccess. The `bt->get_value()` is the `cpp.Pointer` dereference but the actual `BasicTypes` access to the `getInt()` method is via the `.` operator, structure access.
 
-### Constructor - Heap allocated, pointer of type pointer to object, pointer access
+#### Constructor - Heap allocated, pointer of type pointer to object, pointer access
 ```
 @:unreflective
 @:include("./mylib/basictypes.h")
@@ -170,7 +178,7 @@ This seems pretty useless to me. It changes the C++ field access to use the `->`
 HXLINE(  29)		int _hx_tmp = bt->get_value()->getInt();
 ```
 
-### Constructor - Stack allocated, object reference, struct access
+#### Constructor - Stack allocated, object reference, struct access
 ```
 @:unreflective
 @:structAccess
@@ -193,3 +201,80 @@ extern class ClassConstructionRefOfType {
 	public static function create():cpp.Reference<ClassConstructionRefOfType>;
 ```
 This seems appealing but it really offers no benefit over the first case above and is stack allocated which limits its usefulness.
+
+### Function Calls with Basic Types
+
+These examples are in the `BasicTypes.hx` and `TestBasicTypes.hx` modules.
+
+There are a very large number of possible examples so I'll cherry pick examples I'm interested in. Feel free to request others or submit PRs.
+
+#### Simple call with basic type returns
+
+```
+@:native("BasicTypes")
+extern class BasicTypes {
+...
+...
+...
+	/**
+	 * Get an Int by value.
+	 * @return Int
+	 */
+	public function getInt():Int;
+```
+
+This just simply gets an int from C++. This extern is for the following C++
+```
+	int getInt();
+```
+
+Super simple and obvious and for basic types that's mostly the story.
+You can do pointer and reference returns even leveraging the C++ copy/move if you capture the return value in the single expression. For example, this Haxe
+```
+	public function getIntPtr():cpp.RawPointer<Int>;
+```
+externing this C++
+```
+	int* getIntPtr();
+```
+called with this Haxe
+```
+		var i = bt.getIntPtr()[0];
+```
+generates this transpile output
+```
+HXLINE(  27)		int i = bt.getIntPtr()[0];
+```
+which captures the return value from the pointer before the end of the C++ expression. If you just keep the pointer as `var i = bt.getIntPtr()` and then try to dereference `i[0]` later it will be a dangling pointer.
+
+The same approach is demonstrated with references and with booleans. References are nice in the that they do not require the `[0]` to dereference.
+
+#### Simple call with basic type out parameter
+
+Given this Haxe
+```
+	/**
+	 * Sum two values and return the result via an out parameter.
+	 */
+	public function sumOutParam(a:Int, b:Int, out:cpp.RawPointer<Int>):Void;
+```
+over this C++
+```
+	void sumOutParam(int a, int b, int* out);
+```
+it requires a RawPointer as do all basic types. But here there is a small bug in the compiler (as of Haxe 4.3.6) where you would expect
+```
+		var rv:Int = 0;
+		bt.sumOutParam(16, 12, RawPointer.addressOf(rv));
+```
+to work it does not. This generates invalid C++ because `rv` is optimized out. To work around this one case do either of the following
+```
+		var rv:AsVar<Int> = 0;
+		bt.sumOutParam(16, 12, RawPointer.addressOf(rv));
+```
+or 
+```
+		var rv:Int = 0;
+		bt.sumOutParam(16, 12, Pointer.addressOf(rv).raw);
+```
+I'd probably recommend the latter as it should be compatible with the fixed and the existing code.

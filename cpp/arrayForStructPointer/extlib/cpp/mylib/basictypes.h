@@ -18,4 +18,12 @@ public:
 	bool* getBoolPtr();
 
 	bool& getBoolRef();
+
+	int sum(int a, int b);
+
+	void sumOutParam(int a, int b, int* out);
+
+	// FIXME Move to StringTypes.
+	//const char* concat(const char* a, const char* b);
+	//std::string concat(const char* a, const char* b);
 };

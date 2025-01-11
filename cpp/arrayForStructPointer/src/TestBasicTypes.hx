@@ -1,3 +1,7 @@
+import cpp.Pointer;
+import cpp.RawPointer;
+import haxe.display.Diagnostic.MissingFieldDiagnostic;
+import haxe.extern.AsVar;
 import utest.Assert;
 
 class TestBasicTypes extends utest.Test {
@@ -51,5 +55,30 @@ class TestBasicTypes extends utest.Test {
 		var bt = BasicTypes.create();
 		var v:Bool = bt.getBoolRef();
 		Assert.isTrue(v);
+	}
+
+	function testSum():Void {
+		var bt = BasicTypes.create();
+		var v = bt.sum(16, 12);
+		Assert.equals(28, v);
+	}
+
+	function testSumOut():Void {
+		var bt = BasicTypes.create();
+		// AsVar causes the compiler to retain the variable where otherwise
+		// it might optimize this removing the variable and inline it as a
+		// constant.
+		// See CPPExternNotes.md for explanation of this.
+		var rv:AsVar<Int> = 0;
+		bt.sumOutParam(16, 12, RawPointer.addressOf(rv));
+		Assert.equals(28, rv);
+	}
+
+	function testSumOutAlt():Void {
+		// An alternative way of working around the inline constant problem.
+		var bt = BasicTypes.create();
+		var rv:Int = 0;
+		bt.sumOutParam(16, 12, Pointer.addressOf(rv).raw);
+		Assert.equals(28, rv);
 	}
 }
