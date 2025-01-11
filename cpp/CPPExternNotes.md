@@ -336,7 +336,7 @@ Given a Haxe function at the module level
  * @return Int a + b
  */
 function add(a:Int, b:Int):Int {
-	return a + 2 * b;
+	return a + b;
 }
 ```
 and the following extern class model
