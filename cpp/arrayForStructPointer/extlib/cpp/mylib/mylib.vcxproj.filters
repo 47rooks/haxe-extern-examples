@@ -24,6 +24,9 @@
     <ClCompile Include="callbackexamples.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stringexamples.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arrayexamples.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="callbackexamples.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stringexamples.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

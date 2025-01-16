@@ -18,7 +18,6 @@ extern class CallbackExamples {
 	 * Factory function mapped to the native constructor.
 	 * @return an BasicTypes instance
 	 */
-	// @:native("new BasicTypes")
 	@:native("CallbackExamples")
 	public static function create(cbk:Callable<(Int, Int) -> Int>):CallbackExamples;
 

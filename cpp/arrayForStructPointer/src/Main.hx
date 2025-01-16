@@ -1,7 +1,6 @@
 package;
 
 import ArrayExamples;
-import BasicTypes;
 // import cpp.Reference;
 // import haxe.ds.StringMap;
 import haxe.xml.Access;
@@ -63,7 +62,13 @@ class Main {
 	}
 
 	public static function main() {
-		utest.UTest.run([new TestClassConstruction(), new TestBasicTypes(), new TestCallbackExamples()]);
+		trace('running');
+		utest.UTest.run([
+			new TestClassConstruction(),
+			new TestBasicTypes(),
+			new TestCallbackExamples(),
+			new TestStringExamples()
+		]);
 		// testArrayExamples();
 	}
 }

@@ -7,6 +7,8 @@
 -D HXCPP_VERBOSE
 -D HXCPP_M64
 -D HXCPP_CPP17=1
+# -D hxcpp_smart_strings=0
+-D UTEST_PRINT_TESTS
 -debug
 -lib utest
 # -cmd clear

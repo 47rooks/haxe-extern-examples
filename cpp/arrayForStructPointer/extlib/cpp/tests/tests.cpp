@@ -3,6 +3,7 @@
 #include "arrayexamples.h"
 #include "basictypes.h"
 #include "callbackexamples.h"
+#include "stringexamples.h"
 
 #include <iostream>
 #include <string>
@@ -124,4 +125,28 @@ namespace tests
 			Assert::AreEqual(27, ce.invoke(12, 15));
 		}
 	};
+
+	TEST_CLASS(StringExamplesTests) {
+	public:
+		TEST_METHOD(testGetString) {
+
+			StringExamples se = StringExamples("hello world");
+			Assert::AreEqual("hello world", se.get_string());
+		}
+
+		TEST_METHOD(testSetString) {
+
+			StringExamples se = StringExamples("hello world");
+			se.set_string("goodbye");
+			Assert::AreEqual("goodbye", se.get_string());
+		}
+
+		TEST_METHOD(testDelete) {
+
+			StringExamples *se = new StringExamples("hello world");
+			se->set_string("goodbye");
+			delete se;
+		}
+	};
+
 }

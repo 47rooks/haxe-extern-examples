@@ -1,20 +1,21 @@
 # CPP Extern Notes
 
 - [CPP Extern Notes](#cpp-extern-notes)
-  - [Introduction](#introduction)
-  - [Patterns](#patterns)
-    - [Constructors](#constructors)
-      - [Constructor - Stack allocated, object, struct access](#constructor---stack-allocated-object-struct-access)
-      - [Constructor - Heap allocated, pointer to object, struct access](#constructor---heap-allocated-pointer-to-object-struct-access)
-      - [Constructor - Heap allocated, pointer of type pointer to object, pointer access](#constructor---heap-allocated-pointer-of-type-pointer-to-object-pointer-access)
-      - [Constructor - Stack allocated, object reference, struct access](#constructor---stack-allocated-object-reference-struct-access)
-    - [Function Calls with Basic Types](#function-calls-with-basic-types)
-      - [Simple call with basic type returns](#simple-call-with-basic-type-returns)
-      - [Simple call with basic type parameters and pointer to basic type return](#simple-call-with-basic-type-parameters-and-pointer-to-basic-type-return)
-      - [Simple call with basic type parameters and return](#simple-call-with-basic-type-parameters-and-return)
-      - [Simple call with basic type out parameter](#simple-call-with-basic-type-out-parameter)
-    - [Invoking Haxe from C++](#invoking-haxe-from-c)
-      - [A module function callback](#a-module-function-callback)
+	- [Introduction](#introduction)
+	- [Patterns](#patterns)
+		- [Constructors](#constructors)
+			- [Constructor - Stack allocated, object, struct access](#constructor---stack-allocated-object-struct-access)
+			- [Constructor - Heap allocated, pointer to object, struct access](#constructor---heap-allocated-pointer-to-object-struct-access)
+			- [Constructor - Heap allocated, pointer of type pointer to object, pointer access](#constructor---heap-allocated-pointer-of-type-pointer-to-object-pointer-access)
+			- [Constructor - Stack allocated, object reference, struct access](#constructor---stack-allocated-object-reference-struct-access)
+		- [Function Calls with Basic Types](#function-calls-with-basic-types)
+			- [Simple call with basic type returns](#simple-call-with-basic-type-returns)
+			- [Simple call with basic type parameters and pointer to basic type return](#simple-call-with-basic-type-parameters-and-pointer-to-basic-type-return)
+			- [Simple call with basic type parameters and return](#simple-call-with-basic-type-parameters-and-return)
+			- [Simple call with basic type out parameter](#simple-call-with-basic-type-out-parameter)
+		- [Invoking Haxe from C++](#invoking-haxe-from-c)
+			- [A module function callback](#a-module-function-callback)
+		- [Strings](#strings)
 
 
 In general the plan is to have an extern project here for a kind of native
@@ -364,3 +365,16 @@ we can pass the `add()` function to an instance of the `CallbackExamples` during
 		var ce = CallbackExamples.create(Function.fromStaticFunction(add));
         var result = ce.invoke(100, 120);
 ```
+
+### Strings
+
+Passing string to externs has been difficult if the C++ used std::string. For the moment the example uses a char * and null terminated string ala C. This is straightforward to pass and return from C++. In addition it is worth noting that there is a destructor which is used to deallocate the memory allocated to store the string. The destructor is triggered when the `destroy()` is a called on the `se:cpp.Pointer`. This is also the reason that the class is modelled to be a pointer class.
+
+These examples are in
+
+|File|Description|
+|-|-|
+|stringexamples.h|The C++ library header|
+|stringexamples.cpp|The C++ implementation|
+|StringExamples.hx|The Haxe extern model for the StringExamples C++ class|
+|TestStringExamples.hx|The Haxe unit test showing how to use the extern in various cases|
