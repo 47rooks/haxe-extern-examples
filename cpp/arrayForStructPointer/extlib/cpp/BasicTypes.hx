@@ -19,11 +19,14 @@ import cpp.RawConstPointer;
 extern class BasicTypes {
 	/**
 	 * Factory function mapped to the native constructor.
+	 * @param i an integer - it is helpful to identify ensure different tests
+	 * are not interacting with one another or relying on default values.
+	 * @param b a boolean, similar to `i` in use.
 	 * @return an BasicTypes instance
 	 */
 	// @:native("new BasicTypes")
 	@:native("BasicTypes")
-	public static function create():BasicTypes;
+	public static function create(i:Int, b:Bool):BasicTypes;
 
 	/**
 	 * Get an Int by value.

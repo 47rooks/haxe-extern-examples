@@ -11,13 +11,13 @@ class TestClassConstruction extends utest.Test {
 		// This is much nicer for access as it looks just like regular Haxe
 		// as there is no need to call .value to dereference the pointer as
 		// there is in the pointer based modelling
-		var bt = ClassConstruction.create();
+		var bt = ClassConstruction.create(10, false);
 		Assert.equals(10, bt.getInt());
 	}
 
 	function testClassConstructionPtrOfType():Void {
 		// This is heap allocated and we call destroy() when we are done
-		var bt = ClassConstructionPtrOfType.create();
+		var bt = ClassConstructionPtrOfType.create(10, false);
 		// Note .value to dereference the pointer.
 		Assert.equals(10, bt.value.getInt());
 		bt.destroy();
@@ -25,14 +25,14 @@ class TestClassConstruction extends utest.Test {
 
 	function testClassConstructionPtrOfPtrToType():Void {
 		// This is heap allocated and we call destroy() when we are done
-		var bt = ClassConstructionPtrOfPtrToType.create();
+		var bt = ClassConstructionPtrOfPtrToType.create(10, false);
 		Assert.equals(10, bt.value.getInt());
 		bt.destroy();
 	}
 
 	function testClassConstructionRefOfType():Void {
 		// This is stack allocated so there is no destroy() call
-		var bt = ClassConstructionRefOfType.create();
+		var bt = ClassConstructionRefOfType.create(10, false);
 		Assert.equals(10, bt.getInt());
 	}
 }

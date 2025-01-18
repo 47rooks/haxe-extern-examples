@@ -6,24 +6,26 @@
 /// </summary>
 class __declspec(dllexport) BasicTypes
 {
+private:
+	int m_i;
+	bool m_b;
+
 public:
+	BasicTypes(int i, bool b) : m_i{i}, m_b{b} {}
+
 	int getInt();
 
-	int* getIntPtr();
+	int *getIntPtr();
 
-	int& getIntRef();
+	int &getIntRef();
 
 	bool getBool();
 
-	bool* getBoolPtr();
+	bool *getBoolPtr();
 
-	bool& getBoolRef();
+	bool &getBoolRef();
 
 	int sum(int a, int b);
 
-	void sumOutParam(int a, int b, int* out);
-
-	// FIXME Move to StringTypes.
-	//const char* concat(const char* a, const char* b);
-	//std::string concat(const char* a, const char* b);
+	void sumOutParam(int a, int b, int *out);
 };

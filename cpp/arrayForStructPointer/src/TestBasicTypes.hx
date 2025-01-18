@@ -6,12 +6,12 @@ import utest.Assert;
 
 class TestBasicTypes extends utest.Test {
 	function testGetInt():Void {
-		var bt = BasicTypes.create();
+		var bt = BasicTypes.create(10, false);
 		Assert.equals(10, bt.getInt());
 	}
 
 	function testGetIntPtr():Void {
-		var bt = BasicTypes.create();
+		var bt = BasicTypes.create(11, false);
 
 		// Note that here we must immediately capture the referent int
 		// from the pointer. This is not a general requirement but applies
@@ -30,7 +30,7 @@ class TestBasicTypes extends utest.Test {
 	}
 
 	function testGetIntRef():Void {
-		var bt = BasicTypes.create();
+		var bt = BasicTypes.create(12, false);
 		// The line below extracts the value from the Reference by a simple
 		// cast. This works because the Reference is simply a typedef for the
 		// type.
@@ -39,12 +39,12 @@ class TestBasicTypes extends utest.Test {
 	}
 
 	function testGetBool():Void {
-		var bt = BasicTypes.create();
+		var bt = BasicTypes.create(0, false);
 		Assert.isFalse(bt.getBool());
 	}
 
 	function testGetBoolPtr():Void {
-		var bt = BasicTypes.create();
+		var bt = BasicTypes.create(0, false);
 		// This is the same case as in `BasicTypes.getIntPtr()`.
 		var v = bt.getBoolPtr()[0];
 		trace('v=${v}');
@@ -52,19 +52,19 @@ class TestBasicTypes extends utest.Test {
 	}
 
 	function testGetBoolRef():Void {
-		var bt = BasicTypes.create();
+		var bt = BasicTypes.create(0, true);
 		var v:Bool = bt.getBoolRef();
 		Assert.isTrue(v);
 	}
 
 	function testSum():Void {
-		var bt = BasicTypes.create();
+		var bt = BasicTypes.create(0, false);
 		var v = bt.sum(16, 12);
 		Assert.equals(28, v);
 	}
 
 	function testSumOut():Void {
-		var bt = BasicTypes.create();
+		var bt = BasicTypes.create(0, false);
 		// AsVar causes the compiler to retain the variable where otherwise
 		// it might optimize this removing the variable and inline it as a
 		// constant.
@@ -76,7 +76,7 @@ class TestBasicTypes extends utest.Test {
 
 	function testSumOutAlt():Void {
 		// An alternative way of working around the inline constant problem.
-		var bt = BasicTypes.create();
+		var bt = BasicTypes.create(0, false);
 		var rv:Int = 0;
 		bt.sumOutParam(16, 12, Pointer.addressOf(rv).raw);
 		Assert.equals(28, rv);

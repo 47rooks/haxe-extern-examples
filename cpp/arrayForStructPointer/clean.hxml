@@ -1,0 +1,7 @@
+# This build file is simply to delete all build output both in the C++ library
+# and in the Haxe test code. It is intended to be run from this directory
+# as all delete paths are relative to this directory.
+-cmd pwsh -command rm .\\extlib\\cpp\\mylib\\x64\\Debug\\*
+-cmd pwsh -command rm .\\extlib\\cpp\\mylib\\obj\\lib\\*
+-cmd pwsh -command rm .\\extlib\\cpp\\mylib\\obj\\msvc1964\\*
+-cmd pwsh -command rm .\\export\\cpp\\* -recurse -force -confirm:$false

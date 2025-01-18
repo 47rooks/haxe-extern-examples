@@ -17,7 +17,7 @@ class TestStringExamples extends utest.Test {
 		var ns = NativeString.c_str("");
 		var se = StringExamples.create(ns);
 		se.value.setString(NativeString.c_str("Goodbye!"));
-		var s:String = NativeString.fromPointer(se.value.getString());
+		var s:String = NativeString.fromPointerLen(se.value.getString(), 8);
 		Assert.equals("Goodbye!", s);
 		se.destroy();
 	}

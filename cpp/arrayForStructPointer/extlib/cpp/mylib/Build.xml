@@ -1,0 +1,30 @@
+<xml>
+    <!--
+    This build file is an alternative to building the VS Solution.
+    It is run as:
+
+        haxelib run hxcpp Build.xml
+
+    in this directory.
+     -->
+    <files id="mylib">
+        <compilerflag value='-I${this_dir}' />
+        <compilerflag value="/Zi" />
+        <compilerflag value="/std:c++17" />
+        <!-- <compilerflag value="/Zc:nrvo-" /> -->
+        <file name="${this_dir}/arrayexamples.cpp" />
+        <file name="${this_dir}/basictypes.cpp" />
+        <file name="${this_dir}/callbackexamples.cpp" />
+        <file name="${this_dir}/stringexamples.cpp" />
+    </files>
+
+    <target id="default" output="mylib" toolid="dll" tool="linker">
+        <flag value="/DEBUG:FULL" />
+        <outdir name="./x64/Debug" />
+        <files id="mylib" />
+        <ext value=".dll" />
+        <!-- FIXME these copies are not working right now -->
+        <copyfile name="mylib.lib" from="${this_dir}/obj/lib/mylib.lib" toolid="dll" />
+        <copyfile name="mylib.pdb" from="${this_dir}/obj/lib/mylib.pdb" toolid="dll" />
+    </target>
+</xml>

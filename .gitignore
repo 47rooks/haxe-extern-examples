@@ -3,3 +3,4 @@
 **/.vs/**
 **/pch.cpp
 **/pch.h
+**/*.pdb

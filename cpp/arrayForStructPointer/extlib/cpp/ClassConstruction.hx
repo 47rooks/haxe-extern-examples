@@ -27,7 +27,7 @@ extern class ClassConstruction {
 	 * @return a ClassConstruction instance
 	 */
 	@:native("BasicTypes")
-	public static function create():ClassConstruction;
+	public static function create(i:Int, b:Bool):ClassConstruction;
 
 	/**
 	 * Get an Int by value.
@@ -54,7 +54,7 @@ extern class ClassConstructionPtrOfType {
 	 * @return an cpp.Pointer to a ClassConstructionPtrOfType instance
 	 */
 	@:native("new BasicTypes")
-	public static function create():cpp.Pointer<ClassConstructionPtrOfType>;
+	public static function create(i:Int, b:Bool):cpp.Pointer<ClassConstructionPtrOfType>;
 
 	/**
 	 * Get an Int by value.
@@ -81,7 +81,7 @@ extern class ClassConstructionPtrOfPtrToType {
 	 * instance
 	 */
 	@:native("new BasicTypes")
-	public static function create():cpp.Pointer<ClassConstructionPtrOfPtrToType>;
+	public static function create(i:Int, b:Bool):cpp.Pointer<ClassConstructionPtrOfPtrToType>;
 
 	/**
 	 * Get an Int by value.
@@ -108,7 +108,7 @@ extern class ClassConstructionRefOfType {
 	 * @return a cpp.Reference of ClassConstructionRefOfType instance
 	 */
 	@:native("BasicTypes")
-	public static function create():cpp.Reference<ClassConstructionRefOfType>;
+	public static function create(i:Int, b:Bool):cpp.Reference<ClassConstructionRefOfType>;
 
 	/**
 	 * Get an Int by value.

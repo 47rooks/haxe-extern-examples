@@ -239,7 +239,9 @@ Super simple and obvious and for basic types that's mostly the story.
 
 #### Simple call with basic type parameters and pointer to basic type return
 
-You can do pointer and reference returns even leveraging the C++ copy/move if you capture the return value in the single expression. For example, this Haxe
+Returns in these tests, except the `getInt()` returning the literal constant 10, return a pointer or reference to a member of the class. Lifetime extension of returned temporaries is a complex topic and probably best avoided unless you can clearly identify that a specific case complies with the standard. 
+
+Basic types are returned in RawPointers and deferenced to the value using the array element syntax `[0]`.
 ```
 	public function getIntPtr():cpp.RawPointer<Int>;
 ```
@@ -251,13 +253,6 @@ called with this Haxe
 ```
 		var i = bt.getIntPtr()[0];
 ```
-generates this transpile output
-```
-HXLINE(  27)		int i = bt.getIntPtr()[0];
-```
-which captures the return value from the pointer before the end of the C++ expression. If you just keep the pointer as `var i = bt.getIntPtr()` and then try to dereference `i[0]` later it will be a dangling pointer.
-
-The same approach is demonstrated with references and with booleans. References are nice in the that they do not require the `[0]` to dereference.
 
 #### Simple call with basic type parameters and return
 
