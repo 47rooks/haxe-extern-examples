@@ -160,5 +160,6 @@ C++ 11.
 ## References
 
 [Hugh Sanderson's talk on CPP externs](https://haxe.io/roundups/wwx/c++-magic/)
+  There is so much in this talk, you need to go through this multiple times to pull it all out.
 
 [Stackoverflow post on externs referring to Hugh's example](https://stackoverflow.com/questions/35620851/access-c-class-from-haxe-using-extern)

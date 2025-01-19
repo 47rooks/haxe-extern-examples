@@ -2,6 +2,8 @@
 
 - [CPP Extern Notes](#cpp-extern-notes)
 	- [Introduction](#introduction)
+	- [Metadata](#metadata)
+		- [@:headerCode Example](#headercode-example)
 	- [Patterns](#patterns)
 		- [Constructors](#constructors)
 			- [Constructor - Stack allocated, object, struct access](#constructor---stack-allocated-object-struct-access)
@@ -29,6 +31,67 @@ Essentially externs in Haxe provide a way to tell the compiler what code to gene
 
 There are pairs of Haxe files, being a test class to demonstrate a collection of related features and a corresponding and similarly named `Test*.hx` which tests the functions to demonstrate how the externs are used. The extern classes themselves are part of the library under `extlib\cpp`. The thinking here is that a additional externs to different targets will be added and a generic layer abstracting away target specific types will be added above them.
 
+## Metadata
+
+Referred to as Level 2 - Meta Magic in Hugh Sanderson's 2014 talk these allow you to insert code directly into compilation units from the Haxe file. I cannot see myself using these for large chunks of code because there is no syntax checking or code helps as the cpp is in a quoted string. Also quoting within that string would likely get ugly with escape characters. But they are useful for small things and quick experiments.
+
+|Metadata|Description|
+|-|-|
+|@:headerClassCode|Inject member variables/inline functions|
+|@:headerCode|Include external headers|
+|@:headerNamespaceCode|Declare globals in namespaces|
+|@:cppFileCode|Include external headers only in cpp file|
+|@:cppNamespaceCode|Implement static variables|
+
+### @:headerCode Example
+
+The code is in `TestHeaderCodeExamples.hx` and is completely self-contained. This is basically a complete copy of the Meta Magic talk example. The code consists of three basic pieces. An extern definition for the class defined in the `@:headerCode` meta, the meta itself, and a piece of test code. Using these metas can require care regarding where the code will end up when compiled into the cpp source.
+
+In this case the `@:headerCode` ends up exactly as is in the `.h` file, while the `TestHeaderCodeExamples` code ends up in the `.cpp` file and imports the `.h`. Thus it has access to the code. At the Haxe level the meta code is described by the `extern class HCExample` just like any other extern class.
+```
+package;
+
+import cpp.NativeString;
+import utest.Assert;
+
+@:structAccess
+@:native("HCExample")
+extern class HCExample {
+	@:native("new HCExample")
+	public static function create(s:cpp.ConstPointer<cpp.Char>):cpp.Pointer<HCExample>;
+
+	@:native("get_string")
+	public function getString():cpp.ConstPointer<cpp.Char>;
+}
+
+@:headerCode('
+#include <string>
+#include <iostream>
+
+class HCExample
+{
+private:
+	std::string *m_string;
+public:
+	HCExample(const char* s): m_string {new std::string(s)} {
+		std::cout << "HCExample(hc++): " << *m_string << std::endl;
+	}
+    
+    const char *get_string() {
+        return m_string->c_str();
+    }
+};
+')
+class TestHeaderCodeExamples extends utest.Test {
+	function testStringLifeCycle():Void {
+		var ns = NativeString.c_str("Hello");
+		var hc = HCExample.create(ns);
+		var s = NativeString.fromPointer(hc.value.getString());
+		trace(s);
+		Assert.equals("Hello", s);
+	}
+}
+```
 ## Patterns
 
 ### Constructors
@@ -373,3 +436,4 @@ These examples are in
 |stringexamples.cpp|The C++ implementation|
 |StringExamples.hx|The Haxe extern model for the StringExamples C++ class|
 |TestStringExamples.hx|The Haxe unit test showing how to use the extern in various cases|
+
