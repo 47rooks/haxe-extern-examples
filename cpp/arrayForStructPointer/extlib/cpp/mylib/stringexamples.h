@@ -1,8 +1,15 @@
 #pragma once
 #include <iostream>
+#include <cstring>
 #include <string>
 
+#ifdef __linux__
+class StringExamples
+#elif _WIN32
 class __declspec(dllexport) StringExamples
+#else
+#error "Unknown platform"
+#endif
 {
 private:
 	char *m_cp;

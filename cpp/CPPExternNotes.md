@@ -17,6 +17,7 @@
 			- [Simple call with basic type out parameter](#simple-call-with-basic-type-out-parameter)
 		- [Invoking Haxe from C++](#invoking-haxe-from-c)
 			- [A module function callback](#a-module-function-callback)
+		- [Invoking Haxe from C](#invoking-haxe-from-c-1)
 		- [Strings](#strings)
 
 
@@ -35,13 +36,13 @@ There are pairs of Haxe files, being a test class to demonstrate a collection of
 
 Referred to as Level 2 - Meta Magic in Hugh Sanderson's 2014 talk these allow you to insert code directly into compilation units from the Haxe file. I cannot see myself using these for large chunks of code because there is no syntax checking or code helps as the cpp is in a quoted string. Also quoting within that string would likely get ugly with escape characters. But they are useful for small things and quick experiments.
 
-|Metadata|Description|
-|-|-|
-|@:headerClassCode|Inject member variables/inline functions|
-|@:headerCode|Include external headers|
-|@:headerNamespaceCode|Declare globals in namespaces|
-|@:cppFileCode|Include external headers only in cpp file|
-|@:cppNamespaceCode|Implement static variables|
+| Metadata              | Description                               |
+| --------------------- | ----------------------------------------- |
+| @:headerClassCode     | Inject member variables/inline functions  |
+| @:headerCode          | Include external headers                  |
+| @:headerNamespaceCode | Declare globals in namespaces             |
+| @:cppFileCode         | Include external headers only in cpp file |
+| @:cppNamespaceCode    | Implement static variables                |
 
 ### @:headerCode Example
 
@@ -378,12 +379,12 @@ That out of the way, there are at least three ways I can see this being done. Th
 
 These examples are in
 
-|File|Description|
-|-|-|
-|callbackexamples.h|The C++ library header|
-|callbackexamples.cpp|The C++ implementation|
-|CallbackExamples.hx|The Haxe extern model for the CallbackExamples C++ class|
-|TestCallbackExamples.hx|The Haxe unit test showing how to use the extern in various cases|
+| File                    | Description                                                       |
+| ----------------------- | ----------------------------------------------------------------- |
+| callbackexamples.h      | The C++ library header                                            |
+| callbackexamples.cpp    | The C++ implementation                                            |
+| CallbackExamples.hx     | The Haxe extern model for the CallbackExamples C++ class          |
+| TestCallbackExamples.hx | The Haxe unit test showing how to use the extern in various cases |
 
 Given a Haxe function at the module level
 ```
@@ -423,6 +424,22 @@ we can pass the `add()` function to an instance of the `CallbackExamples` during
 		var ce = CallbackExamples.create(Function.fromStaticFunction(add));
         var result = ce.invoke(100, 120);
 ```
+### Invoking Haxe from C
+
+This usecase comes from wanting to call back from Lua, which is C, to Haxe. Further the desire is to call any kind of function, a static, a module function, a member function of an object or a closure. The files involved are
+
+| File                    | Description                                                       |
+| ----------------------- | ----------------------------------------------------------------- |
+| cfunc.h                 | The C library header                                              |
+| cfunc.c                 | The C implementation                                              |
+| CallbackExamples.hx     | The Haxe extern model for the CallbackExamples C++ class          |
+| TestCallbackExamples.hx | The Haxe unit test showing how to use the extern in various cases |
+
+The `cfunc` files provide the C function that will ultimately call back to Haxe. The `CallbackExamples.hx` module provides the Haxe extern which is then used by the `TestCallbackExamples.hx` to test demonstate and validate the system.
+
+`cfunc.foo()` is a function with this form `void foo(void *baton, void (*callback)(void *baton))`. All it does is call the `callback` function with the `baton` pointer passed to it. Obviously it could instead store the value for later use by another function call, as Lua does, but in this simple example this step is omitted. In `CallbackExamples.hx` is `foo_wrapped()`, a C++ function which calls `foo()`. This function is provided in a `@:cppNamespaceCode()` meta as a free function. This is required to get this to work properly. I cannot explain precisely why but I think it helps C call back into C++ because C knows notheing about classes. It provides `foo()` a `baton` parameter that points to a `HxObject` containing a reference to a Haxe function, and a callback function that takes `baton` unpacks the Haxe function from it and calls it. This function is provided as a closure but could just be another function. Now, when `foo()` calls the callback that causes the C++ function to invoke the Haxe function. `CallbackExamples.foo_wrapped` provides the extern wrapper over the this free function and it is necessary that the free function be in the same compilation unit, hence the same file here. But there is another wrinkle. Haxe does not generate code for an extern class. So there is no way to put the  `@:cppNamespaceCode()` meta on the extern class itself. Thus a second dummy class is added in this file to host the meta. This is the reason for the `CallbackExamplesHidden` class. As this class is never used it must also have an `@:keep` meta or DCE will remove it. Its purpose is to allow Haxe to emit the namespace code into a cpp file. Finally `CallbackExamplesHidden` will produce this code into `CallbackExamplesHidden.cpp`. This is not where the extern will expect so it cannot find the function. In order for that to work a header file must be generated which is the reason for the `@:headerCode` meta on `CallbackExamplesHidden`. It just contains the function prototype of the wrapper function. Now, the `CallbackExamples` extern class can use this header by using an `@:include("CallbackExamplesHidden.h")` meta. Once that is done the extern can be used in Haxe, as demonstrated by the tests in `TestCallbackExamples.hx`. As can be seen it can be used with all types of functions.
+
+This approach is credited to Aidan on the Haxe discord. I just tweaked it in a couple of ways to move the extern code out of the client layers into the library.
 
 ### Strings
 
@@ -430,10 +447,10 @@ Passing string to externs has been difficult if the C++ used std::string. For th
 
 These examples are in
 
-|File|Description|
-|-|-|
-|stringexamples.h|The C++ library header|
-|stringexamples.cpp|The C++ implementation|
-|StringExamples.hx|The Haxe extern model for the StringExamples C++ class|
-|TestStringExamples.hx|The Haxe unit test showing how to use the extern in various cases|
+| File                  | Description                                                       |
+| --------------------- | ----------------------------------------------------------------- |
+| stringexamples.h      | The C++ library header                                            |
+| stringexamples.cpp    | The C++ implementation                                            |
+| StringExamples.hx     | The Haxe extern model for the StringExamples C++ class            |
+| TestStringExamples.hx | The Haxe unit test showing how to use the extern in various cases |
 

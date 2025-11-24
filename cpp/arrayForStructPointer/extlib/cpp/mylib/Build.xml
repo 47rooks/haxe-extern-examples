@@ -7,24 +7,41 @@
 
     in this directory.
      -->
+    <files id="mylibcfiles">
+        <file name="${this_dir}/cfunc.c" />
+    </files>
+
     <files id="mylib">
         <compilerflag value='-I${this_dir}' />
-        <compilerflag value="/Zi" />
-        <compilerflag value="/std:c++17" />
+        <compilerflag value="/Zi" if="windows" />
+        <compilerflag value="/std:c++17" if="windows" />
         <!-- <compilerflag value="/Zc:nrvo-" /> -->
+        <compilerflag value="-std=c++17" if="linux" />
+        <compilerflag value="-g" if="linux" />
         <file name="${this_dir}/arrayexamples.cpp" />
         <file name="${this_dir}/basictypes.cpp" />
         <file name="${this_dir}/callbackexamples.cpp" />
         <file name="${this_dir}/stringexamples.cpp" />
     </files>
 
-    <target id="default" output="mylib" toolid="dll" tool="linker">
-        <flag value="/DEBUG:FULL" />
+    <target id="mylibc" output="mylibc" toolid="static_link" tool="linker">
+        <outdir name="./x64/Debug" />
+        <files id="mylibcfiles" />
+        <ext value=".a" if="linux" />
+    </target>
+
+    <target id="default" output="mylib" toolid="static_link" tool="linker">
+        <target id="mylibc" />
+        <flag value="/DEBUG:FULL" if="windows" />
         <outdir name="./x64/Debug" />
         <files id="mylib" />
-        <ext value=".dll" />
+        <!-- <lib name="mylibc" /> -->
+        <ext value=".dll" if="windows" />
+        <ext value=".a" if="linux" />
         <!-- FIXME these copies are not working right now -->
-        <copyfile name="mylib.lib" from="${this_dir}/obj/lib/mylib.lib" toolid="dll" />
-        <copyfile name="mylib.pdb" from="${this_dir}/obj/lib/mylib.pdb" toolid="dll" />
+        <!-- <copyfile name="mylib.lib" from="${this_dir}/obj/lib/mylib.lib"
+            toolid="dll" />
+        <copyfile name="mylib.pdb" from="${this_dir}/obj/lib/mylib.pdb"
+            toolid="dll" /> -->
     </target>
 </xml>

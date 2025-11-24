@@ -14,7 +14,8 @@ package;
 @:include("./mylib/basictypes.h")
 @:buildXml('
     <target  id="haxe">
-    <lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib"/>
+		<lib name="../../extlib/cpp/mylib/x64/Debug/mylib.a" if="linux"/>
+		<lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib" if="windows"/>
 	</target>
 ')
 @:native("BasicTypes")
@@ -41,7 +42,8 @@ extern class ClassConstruction {
 @:include("./mylib/basictypes.h")
 @:buildXml('
     <target  id="haxe">
-    <lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib"/>
+		<lib name="../../extlib/cpp/mylib/x64/Debug/mylib.a" if="linux"/>
+		<lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib" if="windows"/>
 	</target>
 ')
 @:native("BasicTypes")
@@ -67,7 +69,8 @@ extern class ClassConstructionPtrOfType {
 @:include("./mylib/basictypes.h")
 @:buildXml('
     <target  id="haxe">
-    <lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib"/>
+		<lib name="../../extlib/cpp/mylib/x64/Debug/mylib.a" if="linux"/>
+		<lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib" if="windows"/>
 	</target>
 ')
 @:native("BasicTypes *")
@@ -95,7 +98,8 @@ extern class ClassConstructionPtrOfPtrToType {
 @:include("./mylib/basictypes.h")
 @:buildXml('
     <target  id="haxe">
-    <lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib"/>
+		<lib name="../../extlib/cpp/mylib/x64/Debug/mylib.a" if="linux"/>
+		<lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib" if="windows"/>
 	</target>
 ')
 @:native("BasicTypes")

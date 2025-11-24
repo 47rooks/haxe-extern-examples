@@ -11,9 +11,10 @@ import cpp.RawConstPointer;
 @:structAccess
 @:include("./mylib/stringexamples.h")
 @:buildXml('
-     <target  id="haxe">
-     <lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib"/>
-     </target>
+    <target  id="haxe">
+		<lib name="../../extlib/cpp/mylib/x64/Debug/mylib.a" if="linux"/>
+		<lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib" if="windows"/>
+    </target>
  ')
 @:native("StringExamples")
 extern class StringExamples {

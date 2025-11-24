@@ -3,16 +3,19 @@ package;
 import cpp.RawConstPointer;
 
 /**
- * BasicTypes is an extern demonstating modelling of basic types in C++
- * in Haxe. Individual significant points are drawn out in comments on
- * specific functions. The most important thing to remember is the need
- * to use RawPointer types for pointers to basic types.
+	* BasicTypes is an extern demonstating modelling of basic types in C++
+	* in Haxe. Individual significant points are drawn out in comments on
+	* specific functions. The most important thing to remember is the need
+	* to use RawPointer types for pointers to basic types.
+	*     <lib name="../../extlib/cpp/mylib/x64/Debug/mylib.a" if="linux"/>
+
  */
 @:structAccess
 @:include("./mylib/basictypes.h")
 @:buildXml('
     <target  id="haxe">
-    <lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib"/>
+		<lib name="../../extlib/cpp/mylib/x64/Debug/mylib.a" if="linux"/>
+		<lib name="..\\..\\extlib\\cpp\\mylib\\x64\\Debug\\mylib.lib" if="windows"/>
 	</target>
 ')
 @:native("BasicTypes")

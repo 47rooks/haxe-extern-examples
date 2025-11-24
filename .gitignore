@@ -1,6 +1,8 @@
 **/export/**
+**/.haxelib/
 **/x64/**
 **/.vs/**
 **/pch.cpp
 **/pch.h
 **/*.pdb
+**/obj/**

@@ -4,7 +4,13 @@
 /// BasicTypes is a simple test class for basic types. There are no
 /// structures or classes returned or passed.
 /// </summary>
+#ifdef __linux__
+class BasicTypes
+#elif _WIN32
 class __declspec(dllexport) BasicTypes
+#else
+#error "Unknown platform"
+#endif
 {
 private:
 	int m_i;
